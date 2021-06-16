@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\source\\dattingapp\\api\\Api.csproj": {}
+    "e:\\source\\dattingapp\\Api\\Api.csproj": {}
   },
   "projects": {
-    "E:\\source\\dattingapp\\api\\Api.csproj": {
+    "e:\\source\\dattingapp\\Api\\Api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\source\\dattingapp\\api\\Api.csproj",
+        "projectUniqueName": "e:\\source\\dattingapp\\Api\\Api.csproj",
         "projectName": "Api",
-        "projectPath": "E:\\source\\dattingapp\\api\\Api.csproj",
+        "projectPath": "e:\\source\\dattingapp\\Api\\Api.csproj",
         "packagesPath": "C:\\Users\\felip\\.nuget\\packages\\",
-        "outputPath": "E:\\source\\dattingapp\\api\\obj\\",
+        "outputPath": "e:\\source\\dattingapp\\Api\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\felip\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -21,7 +21,6 @@
           "net5.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -43,6 +42,10 @@
             "AutoMapper.Extensions.Microsoft.DependencyInjection": {
               "target": "Package",
               "version": "[8.1.1, )"
+            },
+            "CloudinaryDotNet": {
+              "target": "Package",
+              "version": "[1.15.2, )"
             },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
