@@ -1,9 +1,8 @@
-﻿using Api.Data;
-using Api.DTOs;
+﻿using Api.DTOs;
 using Api.Entities;
 using Api.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,20 +11,19 @@ namespace Api.Controllers
 {
     public class AccountController : BaseApiController
     {
-        private readonly DataContext _context;
+        private readonly IUserRepository _userRepository;
         private readonly ITokenService _tokenService;
 
-        public AccountController(DataContext context, ITokenService tokenService)
+        public AccountController(IUserRepository userRepository, ITokenService tokenService)
         {
-            _context = context;
+            _userRepository = userRepository;
             _tokenService = tokenService;
         }
 
         [HttpPost("[action]")]
         public async Task<ActionResult<UserDTO>> Login(LoginDTO loginDto)
         {
-            var user = await _context.Users
-                .SingleOrDefaultAsync(u => u.UserName == loginDto.Username);
+            var user = await _userRepository.GetByUsernameAsync(loginDto.Username);
 
             if (user is null)
                 return Unauthorized("Invalid username");
@@ -43,7 +41,8 @@ namespace Api.Controllers
             var userResult = new UserDTO
             {
                 Username = user.UserName,
-                Token = _tokenService.CreateToken(user)
+                Token = _tokenService.CreateToken(user),
+                PhotoUrl = user.Photos.FirstOrDefault(p => p.IsMain)?.Url
             };
 
             return Ok(userResult);
@@ -64,8 +63,8 @@ namespace Api.Controllers
                 PasswordSalt = hmac.Key
             };
 
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            _userRepository.Update(user);
+            await _userRepository.SaveAllAsync();
 
             var userResult = new UserDTO
             {
@@ -78,7 +77,7 @@ namespace Api.Controllers
 
         private async Task<bool> UserExists(string username)
         {
-            return await _context.Users.AnyAsync(u => u.UserName == username.ToLower());
+            return (await _userRepository.GetMembersAsync()).Any(u => u.Username == username.ToLower());
         }
     }
 }
