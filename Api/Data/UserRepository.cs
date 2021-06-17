@@ -40,6 +40,11 @@ namespace Api.Data
                 .SingleOrDefaultAsync(u => u.UserName == username);
         }
 
+        public void Add(AppUser user)
+        {
+            _context.Add(user);
+        }
+
         public void Update(AppUser user)
         {
             _context.Entry(user).State = EntityState.Modified;

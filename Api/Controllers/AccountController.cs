@@ -1,6 +1,7 @@
 ﻿using Api.DTOs;
 using Api.Entities;
 using Api.Interfaces;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Security.Cryptography;
@@ -11,11 +12,13 @@ namespace Api.Controllers
 {
     public class AccountController : BaseApiController
     {
+        private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
         private readonly ITokenService _tokenService;
 
-        public AccountController(IUserRepository userRepository, ITokenService tokenService)
+        public AccountController(IMapper mapper, IUserRepository userRepository, ITokenService tokenService)
         {
+            _mapper = mapper;
             _userRepository = userRepository;
             _tokenService = tokenService;
         }
@@ -42,7 +45,8 @@ namespace Api.Controllers
             {
                 Username = user.UserName,
                 Token = _tokenService.CreateToken(user),
-                PhotoUrl = user.Photos.FirstOrDefault(p => p.IsMain)?.Url
+                PhotoUrl = user.Photos.FirstOrDefault(p => p.IsMain)?.Url,
+                KnownAs = user.KnownAs
             };
 
             return Ok(userResult);
@@ -54,22 +58,22 @@ namespace Api.Controllers
             if (await UserExists(registerDto.Username))
                 return BadRequest("Username is taken");
 
+            var user = _mapper.Map<AppUser>(registerDto);
+
             using var hmac = new HMACSHA512();
 
-            var user = new AppUser
-            {
-                UserName = registerDto.Username.ToLower(),
-                PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
-                PasswordSalt = hmac.Key
-            };
+            user.UserName = registerDto.Username.ToLower();
+            user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password));
+            user.PasswordSalt = hmac.Key;
 
-            _userRepository.Update(user);
+            _userRepository.Add(user);
             await _userRepository.SaveAllAsync();
 
             var userResult = new UserDTO
             {
                 Username = user.UserName,
-                Token = _tokenService.CreateToken(user)
+                Token = _tokenService.CreateToken(user),
+                KnownAs = user.KnownAs
             };
 
             return Ok(userResult);

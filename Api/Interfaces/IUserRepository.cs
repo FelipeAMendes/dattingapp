@@ -10,6 +10,7 @@ namespace Api.Interfaces
         Task<IEnumerable<AppUser>> GetUsersAsync();
         Task<AppUser> GetByIdAsync(int id);
         Task<AppUser> GetByUsernameAsync(string username);
+        void Add(AppUser user);
         void Update(AppUser user);
         Task<bool> SaveAllAsync();
 
