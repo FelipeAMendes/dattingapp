@@ -433,4 +433,5 @@ $RECYCLE.BIN/
 !.vscode/extensions.json
 
 appsettings.json
+Api/appsettings.Development.json
 .gitattributes

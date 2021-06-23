@@ -1,5 +1,6 @@
 ﻿using Api.DTOs;
 using Api.Entities;
+using Api.Helpers;
 using Api.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -46,7 +47,8 @@ namespace Api.Controllers
                 Username = user.UserName,
                 Token = _tokenService.CreateToken(user),
                 PhotoUrl = user.Photos.FirstOrDefault(p => p.IsMain)?.Url,
-                KnownAs = user.KnownAs
+                KnownAs = user.KnownAs,
+                Gender = user.Gender
             };
 
             return Ok(userResult);
@@ -73,7 +75,8 @@ namespace Api.Controllers
             {
                 Username = user.UserName,
                 Token = _tokenService.CreateToken(user),
-                KnownAs = user.KnownAs
+                KnownAs = user.KnownAs,
+                Gender = user.Gender
             };
 
             return Ok(userResult);
@@ -81,7 +84,7 @@ namespace Api.Controllers
 
         private async Task<bool> UserExists(string username)
         {
-            return (await _userRepository.GetMembersAsync()).Any(u => u.Username == username.ToLower());
+            return (await _userRepository.GetMembersAsync(new UserParams())).Any(u => u.Username == username.ToLower());
         }
     }
 }

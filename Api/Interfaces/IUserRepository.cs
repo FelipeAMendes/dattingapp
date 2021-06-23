@@ -1,5 +1,6 @@
 using Api.DTOs;
 using Api.Entities;
+using Api.Helpers;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -14,7 +15,7 @@ namespace Api.Interfaces
         void Update(AppUser user);
         Task<bool> SaveAllAsync();
 
+        Task<PagedList<MemberDTO>> GetMembersAsync(UserParams userParams);
         Task<MemberDTO> GetMemberByUserNameAsync(string username);
-        Task<IEnumerable<MemberDTO>> GetMembersAsync();
     }
 }
