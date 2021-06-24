@@ -1,5 +1,6 @@
 ﻿using Api.DTOs;
 using Api.Entities;
+using Api.Enums;
 using Api.Extensions;
 using Api.Helpers;
 using Api.Interfaces;
@@ -39,7 +40,7 @@ namespace Api.Controllers
                 userParams.Gender = user.Gender == "male" ? "female" : "male";
 
             var users = await _userRepository.GetMembersAsync(userParams);
-            Response.AddPaginationHeader(users.CurrentPage, users.PageSize, users.TotalCount, users.TotalPages);
+            Response.AddPaginationHeader(users);
             return Ok(users);
         }
 

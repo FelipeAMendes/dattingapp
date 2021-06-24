@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Member } from 'src/app/models/member';
-import { Pagination } from 'src/app/models/pagination';
-import { User } from 'src/app/models/user';
-import { UserParams } from 'src/app/models/userParams';
+import { Member } from 'src/app/_models/member';
+import { Pagination } from 'src/app/_models/pagination';
+import { User } from 'src/app/_models/user';
+import { UserParams } from 'src/app/_models/userParams';
 import { MembersService } from 'src/app/_services/members.service';
 
 @Component({

@@ -6,9 +6,9 @@ namespace Api.Extensions
 {
     public static class HttpExtensions
     {
-        public static void AddPaginationHeader(this HttpResponse response, int currentPage, int itemsPerPage, int totalItems, int totalPages)
+        public static void AddPaginationHeader<T>(this HttpResponse response, PagedList<T> pagedList)
         {
-            var paginationHeader = new PaginationHeader(currentPage, itemsPerPage, totalItems, totalPages);
+            var paginationHeader = new PaginationHeader(pagedList.CurrentPage, pagedList.PageSize, pagedList.TotalCount, pagedList.TotalPages);
 
             var options = new JsonSerializerOptions
             {
