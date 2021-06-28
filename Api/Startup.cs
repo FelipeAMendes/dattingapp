@@ -1,5 +1,6 @@
 using Api.Extensions;
 using Api.Middleware;
+using Api.SignalR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -24,6 +25,7 @@ namespace Api
             services.AddCors();
             services.AddSwaggerServices();
             services.AddIdentityServices(_config);
+            services.AddSignalR();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -44,6 +46,7 @@ namespace Api
             app.UseCors(c => c
                 .AllowAnyHeader()
                 .AllowAnyMethod()
+                .AllowCredentials()
                 .WithOrigins("https://localhost:4200"));
 
             app.UseAuthentication();
@@ -53,6 +56,8 @@ namespace Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<PresenceHub>("hubs/presence");
+                endpoints.MapHub<MessageHub>("hubs/message");
             });
         }
     }

@@ -30,6 +30,14 @@ namespace Api.Data
                 .ToListAsync();
         }
 
+        public async Task<string> GetUserGender(string username)
+        {
+            return await _context.Users
+                .Where(u => u.UserName == username)
+                .Select(u => u.Gender)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<AppUser> GetByIdAsync(int id)
         {
             return await _context.Users.FindAsync(id);
@@ -50,11 +58,6 @@ namespace Api.Data
         public void Update(AppUser user)
         {
             _context.Entry(user).State = EntityState.Modified;
-        }
-
-        public async Task<bool> SaveAllAsync()
-        {
-            return (await _context.SaveChangesAsync()) > 0;
         }
 
         public async Task<PagedList<MemberDTO>> GetMembersAsync(UserParams userParams)
